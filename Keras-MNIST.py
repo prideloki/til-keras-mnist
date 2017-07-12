@@ -3,7 +3,7 @@
 
 # # MNIST using Keras
 
-# In[ ]:
+# In[1]:
 
 from keras.datasets import mnist
 import matplotlib.pyplot as plt
@@ -11,12 +11,12 @@ import matplotlib.pyplot as plt
 
 # ## Download the MNIST dataset
 
-# In[ ]:
+# In[2]:
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
 
-# In[ ]:
+# In[3]:
 
 plt.subplot(221)
 plt.imshow(X_train[0], cmap = plt.get_cmap('gray'))
@@ -28,7 +28,7 @@ plt.subplot(224)
 plt.imshow(X_train[3], cmap = plt.get_cmap('gray'))
 
 
-# In[ ]:
+# In[4]:
 
 plt.show()
 
@@ -37,12 +37,12 @@ plt.show()
 
 # one digit is represent in 28x28 pixels
 
-# In[ ]:
+# In[5]:
 
 X_train[0].shape
 
 
-# In[ ]:
+# In[6]:
 
 X_train.shape
 
@@ -53,7 +53,7 @@ X_train.shape
 # 
 # simple neural network model with a single hidden layer
 
-# In[ ]:
+# In[7]:
 
 import numpy as np
 from keras.models import Sequential
@@ -63,13 +63,13 @@ from keras.layers import Dropout
 from keras.utils import np_utils
 
 
-# In[ ]:
+# In[8]:
 
 seed = 7
 np.random.seed(seed)
 
 
-# In[ ]:
+# In[9]:
 
 (X_train, y_train) , (X_test, y_test) = mnist.load_data()
 num_pixels = X_train.shape[1] * X_train.shape[2]
@@ -78,7 +78,7 @@ num_pixels
 
 # flatten 28*28 images to a long vector (784 slots)
 
-# In[ ]:
+# In[10]:
 
 X_train = X_train.reshape(X_train.shape[0], num_pixels).astype('float32')
 X_test = X_test.reshape(X_test.shape[0], num_pixels).astype('float32')
@@ -92,7 +92,7 @@ X_test = X_test.reshape(X_test.shape[0], num_pixels).astype('float32')
 
 # normalize the data. the values are scale between 0 and 255
 
-# In[ ]:
+# In[11]:
 
 X_train = X_train / 255
 X_test = X_test / 255
@@ -100,23 +100,23 @@ X_test = X_test / 255
 
 # hot encoding the categorical values
 
-# In[ ]:
+# In[12]:
 
 y_train = np_utils.to_categorical(y_train)
 y_test = np_utils.to_categorical(y_test)
 
 
-# In[ ]:
+# In[13]:
 
 num_classes = y_test.shape[1]
 
 
-# In[ ]:
+# In[14]:
 
 num_classes
 
 
-# In[ ]:
+# In[15]:
 
 def baseline_model():
     model = Sequential()
@@ -130,7 +130,7 @@ def baseline_model():
 # `softmax` activation
 # 
 
-# In[ ]:
+# In[16]:
 
 model = baseline_model()
 model.fit(X_train, y_train, validation_data = (X_test, y_test), epochs=10, batch_size=200,verbose=2)
@@ -140,7 +140,7 @@ print("Baseline Error: %.2f%%" % (100-scores[1]*100))
 
 # ## Simple convolutional neural network for MNIST
 
-# In[ ]:
+# In[17]:
 
 from keras.layers import Dropout
 from keras.layers import Flatten
@@ -151,21 +151,21 @@ from keras import backend as K
 K.set_image_dim_ordering('th')
 
 
-# In[ ]:
+# In[18]:
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 X_train = X_train.reshape(X_train.shape[0],1,28,28).astype('float32')
 X_test = X_test.reshape(X_test.shape[0],1,28,28).astype('float32')
 
 
-# In[ ]:
+# In[19]:
 
 X_train[0].shape
 
 
 # normalize the data, gray color has value range between 0 and 255
 
-# In[ ]:
+# In[20]:
 
 X_train = X_train / 255
 X_test = X_test / 255
@@ -174,12 +174,12 @@ y_test = np_utils.to_categorical(y_test)
 num_classes = y_test.shape[1]
 
 
-# In[ ]:
+# In[21]:
 
 y_test.shape
 
 
-# In[ ]:
+# In[22]:
 
 def baseline_model():
     model = Sequential()
@@ -194,7 +194,7 @@ def baseline_model():
     return model
 
 
-# In[ ]:
+# In[23]:
 
 model = baseline_model()
 
@@ -206,7 +206,7 @@ print("Baseline Error: %.2f%%"%(100-scores[1]*100))
 
 # ## Larger convolutional neural network for MNIST
 
-# In[ ]:
+# In[24]:
 
 import numpy as np
 from keras.datasets import mnist
@@ -221,31 +221,31 @@ from keras import backend as K
 K.set_image_dim_ordering('th')
 
 
-# In[ ]:
+# In[25]:
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
 
-# In[ ]:
+# In[26]:
 
 X_train = X_train.reshape(X_train.shape[0], 1, 28, 28).astype('float32')
 X_test = X_test.reshape(X_test.shape[0], 1, 28, 28).astype('float32')
 
 
-# In[ ]:
+# In[27]:
 
 X_train = X_train / 255
 X_test = X_test / 255
 
 
-# In[ ]:
+# In[28]:
 
 y_train = np_utils.to_categorical(y_train)
 y_test = np_utils.to_categorical(y_test)
 num_classes = y_test.shape[1]
 
 
-# In[ ]:
+# In[29]:
 
 def larger_model():
     model = Sequential()
@@ -263,7 +263,7 @@ def larger_model():
     return model
 
 
-# In[ ]:
+# In[30]:
 
 model = larger_model()
 model.fit(X_train, y_train, validation_data = (X_test, y_test), epochs = 10, batch_size = 200)
