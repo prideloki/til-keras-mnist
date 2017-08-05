@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 
 # In[3]:
 
-plt.subplot(221)
+plt.subplot(221) 
 plt.imshow(X_train[0], cmap = plt.get_cmap('gray'))
 plt.subplot(222)
 plt.imshow(X_train[1], cmap = plt.get_cmap('gray'))
@@ -27,6 +27,16 @@ plt.imshow(X_train[2], cmap = plt.get_cmap('gray'))
 plt.subplot(224)
 plt.imshow(X_train[3], cmap = plt.get_cmap('gray'))
 
+
+# `plt.subplot(221) `
+# 
+# 2 - nrows
+# 
+# 2 - ncols
+# 
+# 1 - plot_number
+# 
+# > In the case when nrows, ncols and plot_number are all less than 10, a convenience exists, such that the a 3 digit number can be given instead, where the hundreds represent nrows, the tens represent ncols and the units represent plot_number. 
 
 # In[4]:
 
@@ -120,14 +130,18 @@ num_classes
 
 def baseline_model():
     model = Sequential()
-    model.add(Dense(num_pixels, input_dim = num_pixels, kernel_initializer='normal', activation='relu'))
-#     output layer
+    model.add(Dense(num_pixels, input_dim = num_pixels, kernel_initializer = 'normal', activation = 'relu'))
+    # output layer
     model.add(Dense(num_classes, kernel_initializer='normal', activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
     return model
 
 
-# `softmax` activation
+# - use `softmax` activation on output layer.
+# - categorical_crossentropy = logarithmic loss.
+# - `adam` optimization.
+# - There is one hiden layer.
+# - `softmax` activation turn the outputs into proability-like values
 # 
 
 # In[16]:
@@ -194,6 +208,32 @@ def baseline_model():
     return model
 
 
+# 1st hidden layer:
+# - convolutional layer(Convolution2D)
+# - has 32 features
+# - rectifier activation function
+# - expect image with the structure outline [pixel][width][height]
+# 
+# 2nd layer:
+# - pooling layer
+# - MaxPooling2D
+# - size 2x2
+# 
+# 3rd layer:
+# - regulasize layer
+# - using dropout called Dropout
+# - randomly exclude 20% of neurons, reduce overfitting
+# 
+# 4th layer:
+# - Convert 2D matrix to a vector
+# 
+# 5th layer:
+# - connect 128 neurons
+# 
+# 6th layer:
+# - 10 neurons for the 10 classes
+# - softmax activation func
+
 # In[23]:
 
 model = baseline_model()
@@ -201,7 +241,7 @@ model = baseline_model()
 model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=10, batch_size=200, verbose=2)
 
 scores = model.evaluate(X_test, y_test, verbose=0)
-print("Baseline Error: %.2f%%"%(100-scores[1]*100))
+print("Baseline Error: %.2f%%" % (100-scores[1]*100))
 
 
 # ## Larger convolutional neural network for MNIST
@@ -262,6 +302,47 @@ def larger_model():
     model.compile(loss='categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
     return model
 
+
+# 1st hidden layer:
+# - convolutional layer(Convolution2D)
+# - has 30 features
+# - rectifier activation function
+# - expect image with the structure outline [pixel][width][height]
+# - map of size 5x5
+# 
+# 2nd layer:
+# - pooling layer
+# - MaxPooling2D
+# - size 2x2
+# 
+# 3rd layer:
+# - convolutional layer(Convolution2D)
+# - has 15 features
+# - rectifier activation function
+# - map of size 3x3
+# 
+# 4th layer:
+# - pooling layer
+# - MaxPooling2D
+# - size 2x2
+# 
+# 5th layer:
+# - regulasize layer
+# - using dropout called Dropout
+# - randomly exclude 20% of neurons, reduce overfitting
+# 
+# 4th layer:
+# - Convert 2D matrix to a vector
+# 
+# 5th layer:
+# - connect 128 neurons and rectifier activation
+# 
+# 6th layer:
+# - connect 50 neurons and rectifier activation
+# 
+# 6th layer:
+# - 10 neurons for the 10 classes
+# - softmax activation func
 
 # In[30]:
 
